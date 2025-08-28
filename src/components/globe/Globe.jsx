@@ -1,29 +1,36 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stars, Sphere } from '@react-three/drei'
-import { useTexture } from '@react-three/drei'
+import { TextureLoader } from 'three'
 import * as THREE from 'three'
 import PersonalityMarker from './PersonalityMarker'
 import useGlobeStore from '../../stores/globeStore'
 
 function Earth() {
-  const earthTexture = useTexture('/earth-texture.jpg')
+  const earthTexture = new TextureLoader().load('/timeglobe/earth-texture.jpg')
+  
+  // Check if texture loaded successfully
+  if (!earthTexture) {
+    console.error('Failed to load earth texture')
+    return (
+      <Sphere args={[2, 64, 64]}>
+        <meshStandardMaterial 
+          color="#4A90E2" 
+          roughness={0.8}
+          metalness={0.1}
+        />
+      </Sphere>
+    )
+  }
+  
+  // Set texture properties for better rendering
+  earthTexture.anisotropy = 16
+  earthTexture.wrapS = THREE.RepeatWrapping
+  earthTexture.wrapT = THREE.RepeatWrapping
   
   return (
     <Sphere args={[2, 64, 64]}>
       <meshStandardMaterial 
         map={earthTexture} 
-        roughness={0.8}
-        metalness={0.1}
-      />
-    </Sphere>
-  )
-}
-
-function EarthWithFallback() {
-  return (
-    <Sphere args={[2, 64, 64]}>
-      <meshStandardMaterial 
-        color="#4A90E2" 
         roughness={0.8}
         metalness={0.1}
       />
@@ -40,7 +47,7 @@ export default function Globe() {
       <pointLight position={[10, 10, 10]} intensity={1} />
       
       {/* Earth */}
-      <EarthWithFallback />
+      <Earth />
       
       {/* Stars background */}
       <Stars 
