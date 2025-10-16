@@ -1,0 +1,5 @@
+- [x] Install topojson-client for country borders
+- [x] Update Globe.jsx to fetch and display country borders
+- [x] Change globe texture to daytime view
+- [x] Adjust zoom controls for clearer zooming
+- [ ] Test the globe visualization
